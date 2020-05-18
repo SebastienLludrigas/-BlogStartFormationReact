@@ -8,7 +8,9 @@ import Post from './Post/Post'
 class Blog extends Component {
 
     state = {
-        posts: []
+        posts: [],
+        selectPostId: null,
+        toggle: false
     }
 
     componentDidMount() {
@@ -25,10 +27,24 @@ class Blog extends Component {
             })
     }
 
+    selectId = id => {
+        this.setState({selectPostId: id})
+        this.setState({toggle: true})
+    }
+
+    toggleModale = () => {
+        this.setState({toggle: false})
+    }
+
     render () {
 
         const posts = this.state.posts.map(post => {
-            return <Post key={post.id} auteur={post.auteur} titre={post.title}/>
+            return <Post 
+            key={post.id} 
+            auteur={post.auteur} 
+            titre={post.title}
+            clicked={() => this.selectId(post.id)}
+            />
         })
 
         return (
@@ -37,7 +53,11 @@ class Blog extends Component {
                 <NvPost />
                 </section>
                 <h2 className="text-center my-5">Choisissez un post ...</h2>
-                <PostModale />
+                <PostModale 
+                id={this.state.selectPostId} 
+                cache={this.toggleModale}
+                toggle={this.state.toggle}
+                />
                 <section className="Posts">
                     {posts}
                 </section>
